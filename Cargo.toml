@@ -17,3 +17,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "0squerk"
 path = "src/main.rs"
+
+[dev-dependencies]
+tempfile = "3"

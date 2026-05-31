@@ -14,15 +14,31 @@ pub struct Decision {
 pub fn decide(event: &Event, cfg: &Config) -> Decision {
     let command = config::command(cfg);
     if event.issue.pull_request.is_none() {
-        return Decision { proceed: false, reason: "not a pull request".into(), command };
+        return Decision {
+            proceed: false,
+            reason: "not a pull request".into(),
+            command,
+        };
     }
     if !trigger::is_merge(&event.comment.body) {
-        return Decision { proceed: false, reason: "not a /merge command".into(), command };
+        return Decision {
+            proceed: false,
+            reason: "not a /merge command".into(),
+            command,
+        };
     }
     if !auth::is_write(&event.comment.author_association) {
-        return Decision { proceed: false, reason: "author lacks write access".into(), command };
+        return Decision {
+            proceed: false,
+            reason: "author lacks write access".into(),
+            command,
+        };
     }
-    Decision { proceed: true, reason: String::new(), command }
+    Decision {
+        proceed: true,
+        reason: String::new(),
+        command,
+    }
 }
 
 #[cfg(test)]
@@ -32,7 +48,11 @@ mod tests {
     use crate::event::parse as parse_event;
 
     fn event(body: &str, assoc: &str, is_pr: bool) -> crate::event::Event {
-        let pr = if is_pr { "\"pull_request\": {\"url\": \"x\"}," } else { "" };
+        let pr = if is_pr {
+            "\"pull_request\": {\"url\": \"x\"},"
+        } else {
+            ""
+        };
         let json = format!(
             "{{ \"issue\": {{ \"number\": 1, {pr} \"x\": 0 }},
                 \"comment\": {{ \"body\": \"{body}\", \"author_association\": \"{assoc}\" }} }}"

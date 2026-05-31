@@ -26,7 +26,11 @@ enum Command {
 fn main() {
     let cli = Cli::parse();
     match cli.command {
-        Command::Decide { event: event_path, config: config_path, out } => {
+        Command::Decide {
+            event: event_path,
+            config: config_path,
+            out,
+        } => {
             let ev = event::parse(&fs::read_to_string(&event_path).expect("read event.json"))
                 .expect("parse event.json");
             // config file may be absent -> empty string -> default command

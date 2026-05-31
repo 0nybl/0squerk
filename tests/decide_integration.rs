@@ -18,9 +18,12 @@ fn decide_writes_proceed_true() {
     let status = Command::new(env!("CARGO_BIN_EXE_0squerk"))
         .args([
             "decide",
-            "--event", event.to_str().unwrap(),
-            "--config", config.to_str().unwrap(),
-            "--out", out.to_str().unwrap(),
+            "--event",
+            event.to_str().unwrap(),
+            "--config",
+            config.to_str().unwrap(),
+            "--out",
+            out.to_str().unwrap(),
         ])
         .status()
         .unwrap();

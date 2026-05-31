@@ -111,7 +111,8 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           PR: ${{ github.event.issue.number }}
-        run: gh pr comment "$PR" --body "⏳ squerk: base moved during the build — re-run /merge."
+        run: |
+          gh pr comment "$PR" --body "⏳ squerk: base moved during the build — re-run /merge."
 
       - name: Merge
         if: steps.gate.outputs.proceed == 'true' && steps.build.outputs.code == '0' && steps.guard.outputs.moved != '1'

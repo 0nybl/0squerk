@@ -51,12 +51,22 @@ jobs:
             gh pr comment "$PR" --body "🚫 squerk: $(jq -r '.reason' decision.json)"
           fi
 
+      - name: React to comment
+        if: steps.gate.outputs.proceed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          gh api -X POST \
+            "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" \
+            -f content=heart
+
       - name: Acknowledge
         if: steps.gate.outputs.proceed == 'true'
         env:
           GH_TOKEN: ${{ steps.app.outputs.token }}
           PR: ${{ github.event.issue.number }}
-        run: gh pr comment "$PR" --body "🛠 squerk is rebuilding and testing this PR…"
+        run: |
+          gh pr comment "$PR" --body "🛠 squerk is rebuilding and testing this PR…"
 
       - name: Rebuild squashed result and test
         if: steps.gate.outputs.proceed == 'true'
